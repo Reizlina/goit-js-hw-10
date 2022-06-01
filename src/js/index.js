@@ -11,14 +11,15 @@ const divCountry = document.querySelector('.country-info');
 
 input.addEventListener('input', searchResult);
 
+// ! _.debounce(func, [wait=0], [options={}])
+
 function searchResult() {
   const searchQuery = input.value.trim();
-  //   console.log(searchQuery);
   if (searchQuery.length > 2) {
     fetchCountries(searchQuery)
       .then(countries => {
         if (countries.length > 10) {
-          console.log(
+          Notiflix.Notify.info(
             'Too many matches found. Please enter a more specific name.'
           );
         } else if (countries.length > 2 && countries.length < 10) {
@@ -27,11 +28,11 @@ function searchResult() {
           renderCountry(countries);
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        Notiflix.Notify.failure('Oops, there is no country with that name.');
+      });
   }
 }
-
-// fetchCountries('poland');
 
 function renderCountry(countries) {
   const markup = countries
@@ -56,35 +57,3 @@ function renderCountries(countries) {
     .join('');
   return (list.innerHTML = markup);
 }
-
-// !
-// const fetchUsersBtn = document.querySelector('.btn');
-// const userList = document.querySelector('.user-list');
-
-// fetchUsersBtn.addEventListener('click', () => {
-//   fetchUsers()
-//     .then(users => renderUserList(users))
-//     .catch(error => console.log(error));
-// });
-
-// function fetchUsers() {
-//   return fetch('https://jsonplaceholder.typicode.com/users').then(response => {
-//     if (!response.ok) {
-//       throw new Error(response.status);
-//     }
-//     return response.json();
-//   });
-// }
-
-// function renderUserList(users) {
-//   const markup = users
-//     .map(user => {
-//       return `<li>
-//           <p><b>Name</b>: ${user.name}</p>
-//           <p><b>Email</b>: ${user.email}</p>
-//           <p><b>Company</b>: ${user.company.name}</p>
-//         </li>`;
-//     })
-//     .join('');
-//   userList.innerHTML = markup;
-// }
